@@ -1,0 +1,4 @@
+[submodule "assignment3"]
+	path = assignment3
+	url = https://github.com/ralitsadineva/catkin_ws_user.git
+	branch = version-3
