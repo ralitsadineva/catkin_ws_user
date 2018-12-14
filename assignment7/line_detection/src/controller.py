@@ -29,22 +29,6 @@ class controller:
         self.pub_speed = rospy.Publisher("/manual_control/speed", Int16, queue_size=100)
         self.pub_steering = rospy.Publisher("/steering", UInt8, queue_size=100)
         rospy.sleep(1)
-        #Point = collections.namedtuple('Point', ['x', 'y'])
-        #originalAngle = 179
-        #global msg_1
-        #msg_1 = current_scan
-        #dist_p1 = self.measure_distance(msg_1)
-        #if msg_1 != current_scan:
-        #self.drive(0.3, -200, originalAngle)
-        #global msg_2
-        #msg_2= current_scan
-        #dist_p2 = self.measure_distance(msg_2)
-        #if msg_2 != msg_1:
-        #self.drive(0.1, -200, originalAngle)
-        #global msg_3
-        #msg_3= current_scan
-        #dist_p3 = self.measure_distance(msg_3)
-	    #self.drive(1.0, 200, 90)
 
     def mappingFunction(self, u_t):
     	Angles = collections.namedtuple('Angles', ['original', 'actual'])
@@ -80,51 +64,6 @@ class controller:
         #print(y)
         return y
 
-    # def callbackOdom(self,msg):
-    #     global last_odom
-    #     last_odom = msg
-    #
-    # def waitForFirstOdom(self):
-    #     global last_odom
-    #     while not rospy.is_shutdown() and last_odom is None:
-    #         rospy.loginfo(
-    #             "%s: No initial odometry message received. Waiting for message...",
-    #             rospy.get_caller_id())
-    #         rospy.sleep(1.0)
-    #
-    # def drive(self,distance, speed, angle):
-    #     global last_odom
-    #     epsilon = 0.05
-    #     try:
-    #         #self.pub_speed.publish(0)
-    #         self.pub_stop_start.publish(1)
-    #         rospy.sleep(1)
-    #         self.pub_steering.publish(angle)
-    #         self.pub_stop_start.publish(0)
-    #         rospy.sleep(1)
-    #         self.pub_speed.publish(speed)
-    #     except:
-	#         print("error")
-    #
-    #     start_pos = last_odom.pose.pose.position
-    #     current_distance = 0
-    #
-    #     while not rospy.is_shutdown() and current_distance < (distance - epsilon):
-    #         current_pos = last_odom.pose.pose.position
-    #         current_distance = sqrt((current_pos.x - start_pos.x)**2 + (current_pos.y - start_pos.y)**2)
-    #         # rospy.loginfo("current distance = %f", current_distance)
-    #         rospy.sleep(0.1)
-    #
-    #     try:
-	#         self.pub_speed.publish(0)
-    #     except:
-	#         print("error")
-            #is_active = False
-            #current_pos = last_odom.pose.pose.position
-            #current_distance = sqrt((current_pos.x - start_pos.x)
-            #                        ** 2 + (current_pos.y - start_pos.y)**2)
-
-
     def callback(self,msg):
         global current_scan
         current_scan = msg.data
@@ -146,11 +85,6 @@ class controller:
             self.pub_speed.publish(180)
         else:
             print("current_scan is None")
-
-
-# rospy.init_node('scan_values')
-# sub = rospy.Subscriber('/scan', LaserScan, callback)
-# rospy.spin()
 
 def main(args):
     rospy.init_node('controller')

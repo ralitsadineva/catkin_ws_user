@@ -15,8 +15,6 @@ from cv_bridge import CvBridge, CvBridgeError
 global g_m
 global g_t
 global image
-#global cv_image
-#cv_image=None
 
 class line_detection:
 
@@ -27,7 +25,6 @@ class line_detection:
 
 
     def callback(self,data):
-        #print("callback")
         global cv_image
         try:
             cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
