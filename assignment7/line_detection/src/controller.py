@@ -23,8 +23,6 @@ class controller:
         self.controller_sub = rospy.Subscriber("/e_value", Float64,self.callback)
     	self.timer = rospy.Timer(rospy.Duration(1.5), self.timerCallback)
     	self.controller_pub = rospy.Publisher("/steer_command", UInt8, queue_size=1)
-        # self.sub_odom = rospy.Subscriber("/odom", Odometry, self.callbackOdom, queue_size=100)
-        # #self.waitForFirstOdom()
         self.pub_stop_start = rospy.Publisher("manual_control/stop_start", Int16, queue_size=100)
         self.pub_speed = rospy.Publisher("/manual_control/speed", Int16, queue_size=100)
         self.pub_steering = rospy.Publisher("/steering", UInt8, queue_size=100)
@@ -72,8 +70,6 @@ class controller:
 
     def timerCallback(self, event):
         global current_scan
-        #if current_scan = "error":
-        #    timer.shutdown()
         if current_scan is not None:
             k = 0.5
             u_t = k*(current_scan)
