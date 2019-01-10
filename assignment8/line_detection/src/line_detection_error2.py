@@ -15,8 +15,6 @@ from cv_bridge import CvBridge, CvBridgeError
 global g_m
 global g_t
 global image
-#global cv_image
-#cv_image=None
 
 class line_detection:
 
@@ -25,7 +23,6 @@ class line_detection:
         self.bridge = CvBridge()
         self.pub = rospy.Publisher("/e_value", Float64, queue_size=1)
         self.pub_gradient = rospy.Publisher("/gradient", Float64, queue_size=1)
-
 
     def callback(self,data):
         print("callback")
@@ -41,50 +38,15 @@ class line_detection:
     	gray_min = 200
     	global image
     	ret1, image = cv2.threshold(image2, gray_min, gray_max, cv2.THRESH_BINARY)
-    	#plt.imshow(image)
-    	#print(image.shape)
-        # x = 0
-        # counter = 0
         print(image.shape)
-        # row150 = image[150]
-        # for index, pixel in enumerate(row150):
-        #     if(pixel == 255):
-        #         counter = counter + 1
-        #         x += index
-        # average_x = x/counter
-        # print(average_x)
-        #
-        # center_line = 640/2
-        # e = center_line - average_x
-        # print("e:")
-        # print(e)
-        #
 
         e = self.find_error()
         m = self.find_gradient()
-        # msg = (e, m)
-        # self.pub.publish(msg)
-
 
     def find_error(self):
         global image
-        # global cv_image
-        # try:
-        #     cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
-        # except CvBridgeError as e:
-        #     print(e)
-    	# image1 = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
-    	# print(image1.shape)
-    	# image2 = image1[200:450, 0:640]
-    	# gray_max = 255
-    	# gray_min = 200
-    	# global image
-    	# ret1, image = cv2.threshold(image2, gray_min, gray_max, cv2.THRESH_BINARY)
-    	# #plt.imshow(image)
-    	# #print(image.shape)
         x = 0
         counter = 0
-        # print(image.shape)
         row150 = image[150]
         for index, pixel in enumerate(row150):
             if(pixel == 255):
@@ -97,7 +59,6 @@ class line_detection:
         e = center_line - average_x
         print("e:")
         print(e)
-        # return e
         self.pub.publish(e)
 
     def find_gradient(self):
@@ -124,8 +85,6 @@ class line_detection:
 
         m = (180 - 150)/float(average_x2 - average_x1)
         self.pub_gradient.publish(m)
-        # return m
-
 
 def main(args):
     rospy.init_node('line_detection', anonymous=True)
