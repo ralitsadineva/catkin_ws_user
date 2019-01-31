@@ -17,7 +17,7 @@ from std_msgs.msg import Float64
 from std_msgs.msg import String
 from sensor_msgs.msg import LaserScan
 
-global msg, laneID, scan_msg#, UPPER_CIRCLE_CENTER, LOWER_CIRCLE_CENTER
+global msg, laneID, scan_msg
 laneID = 1
 class find_predicted_point:
 
@@ -196,144 +196,9 @@ class find_predicted_point:
     	angle_rad = np.arccos(np.dot(v1, v2)/(v1_len * v2_len))
     	return angle_rad
 
-
-    # def position_on_map (self,x, y, laneID, distance):
-    #     point = None
-    #     if laneID == 1:
-    #         radius = 1.36
-    #         left = 0.79
-    #         right = 3.51
-    #     else:
-    #         radius = 1.68
-    #         left = 0.47
-    #         right = 3.83
-    #
-    #     if x >= 1.84 and x <= 4.16: #Mitte
-    #         if y < 2.15: #Links
-    #             if x+distance <= 4.16:
-    #                 point = (x+distance, left)
-    #             else:
-    #                 point = self.position_on_map(4.17, y, laneID, x+distance-4.17)
-    #         else: #Rechts
-    #             if x-distance >= 1.84:
-    #                 point = (x-distance, right)
-    #             else:
-    #                 point = self.position_on_map(1.83, y, laneID, 1.83-(x-distance))
-    #     else:
-    #         #center_y = 2.15
-    #         #answer
-    #         #if x < 1.84: #Semicircle oben
-    #          #   center_x = 1.84
-    #           #  new_x = center_x + radius * ((x-center_x)/float(sqrt(((x-center_x)**2) + ((y-center_y)**2))))
-    #            # new_y = center_y + radius * ((y-center_y)/float(sqrt(((x-center_x)**2) + ((y-center_y)**2))))
-    #         original = (x,y)
-    #         point = self.lookahead(original, laneID, distance)
-    #             #x, y = symbols('x y')
-    #             #eq1 = Eq(((x-new_x)**2)+((y-new_y)**2)-(distance**2))
-    #             #eq2 = Eq(((x-center_x)**2)+((y-center_y)**2)-(radius**2))
-    #             #prediction = solve((eq1, eq2),(x, y))
-    #             #print(prediction)
-    #             #if new_y < center_y: #top left
-    #             #for pred in prediction:
-    #                 #if (float(str(pred[1]))< new_y): #float(str(pred[0]))>new_x and
-    #                     #point_x = float(str(pred[0]))
-    #                     #point_y = float(str(pred[1]))
-    #                     #point = (point_x, point_y)
-    #            # else: #top right
-    #            #     for pred in prediction:
-    #             #        if (float(str(pred[0]))<new_x and float(str(pred[1]))< new_y):
-    #              #           point_x = float(str(pred[0]))
-    #               #          point_y = float(str(pred[1]))
-    #                #         point = (point_x, point_y)
-    #
-    #         #else: # Semicircle unten
-    #          #   center_x = 4.16
-    #           #  new_x = center_x + radius * ((x-center_x)/float(sqrt(((x-center_x)**2) + ((y-center_y)**2))))
-    #            # new_y = center_y + radius * ((y-center_y)/float(sqrt(((x-center_x)**2) + ((y-center_y)**2))))
-    #             #x, y = symbols('x y')
-    #             #eq1 = Eq(((x-new_x)**2)+((y-new_y)**2)-(distance**2))
-    #             #eq2 = Eq(((x-center_x)**2)+((y-center_y)**2)-(radius**2))
-    #             #prediction = solve((eq1, eq2),(x, y))
-    #             #print(prediction)
-    #             #if new_y < center_y: #bottom left
-    #            # for pred in prediction:
-    #             #    if (float(str(pred[1]))> new_y): #float(str(pred[0]))>new_x and
-    #              #       point_x = float(str(pred[0]))
-    #               #      point_y = float(str(pred[1]))
-    #                #     point = (point_x, point_y)
-    #           #  if point == None:
-    #            #     d= find_distance(new_x,new_y, 4.15, right)
-    #             #    point = position_on_map(4.16, right, laneID, distance-d)
-    #     return point
-    #
     def find_distance(self,x, y, last_point_x, last_point_y):
         distance = (sqrt(((last_point_x-x)**2) + ((last_point_y-y)**2)))
         return distance
-    #
-    # def getClosestPoint(self,point, laneID):
-    #     UPPER_CIRCLE_CENTER = np.array([1.84, 2.15])
-    #     LOWER_CIRCLE_CENTER = np.array([4.16, 2.15])
-    #     # global UPPER_CIRCLE_CENTER, LOWER_CIRCLE_CENTER
-    #
-    #     xp = point[0]
-    #     yp = point[1]
-    #     point = np.array(point)
-    #     seg = self.getSegment(xp,yp)
-    #     left,right,radius = self.getLaneBorders(laneID)
-    #
-    #     if seg == "middle_left":
-    #         return (xp,left)
-    #     elif seg == "middle_right":
-    #         return (xp,right)
-    #     elif seg == "upper":
-    #         dirVector = point - UPPER_CIRCLE_CENTER
-    #         if np.array_equal(dirVector,np.zeros(2)):
-    #             normDirVector = np.array([-1,0])
-    #         else:
-    #             normDirVector = dirVector/np.linalg.norm(dirVector)
-    #         return normDirVector*radius + UPPER_CIRCLE_CENTER
-    #     elif seg == "lower":
-    #         dirVector = point - LOWER_CIRCLE_CENTER
-    #         if np.array_equal(dirVector,np.zeros(2)):
-    #             normDirVector = np.array([1,0])
-    #         else:
-    #             normDirVector = dirVector/np.linalg.norm(dirVector)
-    #         return normDirVector*radius + LOWER_CIRCLE_CENTER
-    #
-    # def getSegment(self,x,y):
-    #     if x <= 1.84 :
-    #         return "upper"
-    #     elif (x > 1.84) and (x <= 4.16):
-    #         if y < 2.15 :
-    #             return "middle_left"
-    #         else:
-    #             return "middle_right"
-    #     else:
-    #         return "lower"
-    #
-    # def getLaneBorders(self,laneID):
-    #     if laneID == 1 : # inner
-    #         return 0.79,3.51,1.36  #left,right,radius
-    #     elif laneID == 2 :
-    #         return 0.47,3.83,1.68
-    #
-    # def lookahead(self,point, laneID, distance):
-    #     closest =  self.getClosestPoint(point, laneID)
-    #     xc = closest[0]
-    #     yc = closest[1]
-    #     if  self.getSegment (point[0],point[1]) == "upper" : factor = 1
-    #     if  self.getSegment (point[0],point[1]) == "lower" : factor = -1
-    #     radius = self.getLaneBorders(laneID)[2]
-    #     theta = distance/radius
-    #     xd = xc + ( factor * (radius * np.sin(-1*theta)))
-    #     yd = yc - (factor * (radius * (1-np.cos(-1*theta))))
-    #     if xd >= 1.84:
-    #         d= self.find_distance(xc,yc, 4.15, left)
-    #         point = self.position_on_map(1.84, left, laneID, distance-d)
-    #     else:
-    #         point = (xd,yd)
-    #     return point
-
 
     def scan_callback(self,msg):
         global scan_msg
